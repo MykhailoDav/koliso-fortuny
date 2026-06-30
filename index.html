@@ -358,10 +358,17 @@
       ctx.fill();
     }
   }
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+
+  shuffle(NAMES);            // різний порядок імен щоразу
   drawWheel();
 
   // ---- spin logic ----
-  const targetIndex = NAMES.indexOf(RIGGED);
   let currentRot = 0;
   let spinning = false;
 
@@ -373,6 +380,12 @@
     if (spinning) return;
     spinning = true;
     spinBtn.disabled = true;
+
+    // перемішуємо імена перед кожним обертанням — швидкий рух колеса маскує
+    // перерозташування, тож Софія щоразу в новому секторі (виглядає чесно випадково)
+    shuffle(NAMES);
+    drawWheel();
+    const targetIndex = NAMES.indexOf(RIGGED);
 
     // Segment i is drawn from i*seg to (i+1)*seg (clockwise, 0 = 3 o'clock).
     // Its CENTER sits at (i+0.5)*seg. The pointer is at the TOP = -90° = 1.5π.
